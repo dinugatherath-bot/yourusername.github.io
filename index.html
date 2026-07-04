@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Octave — student musicians mentoring students, performing for elders</title>
+<meta name="description" content="Octave is a student-run nonprofit in Howard County, MD offering free one-on-one music mentoring and live performances in memory care, assisted living, and hospice communities.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&family=Spline+Sans+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --parchment:#F5F1E8; --parchment-deep:#ECE6D8; --card:#FFFDF8;
+    --spruce:#2E4A3C; --spruce-deep:#22362D;
+    --brass:#B08A3E; --brass-bright:#D9B36A; --brass-ink:#7E6222;
+    --velvet:#9C5F5B; --ink:#26251F; --ink-soft:#57544A;
+    --display:'Young Serif',Georgia,serif; --body:'Figtree',system-ui,sans-serif; --mono:'Spline Sans Mono',ui-monospace,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--body);color:var(--ink);background:var(--parchment);line-height:1.6;font-size:17px}
+  a{color:inherit}
+  :focus-visible{outline:3px solid var(--brass);outline-offset:3px;border-radius:2px}
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--brass-ink)}
+  h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.15}
+  h2{font-size:clamp(1.7rem,3.6vw,2.5rem);margin:.5rem 0 1rem}
+  .section{max-width:1080px;margin:0 auto;padding:5rem 1.5rem}
+  .lede{font-size:1.12rem;color:var(--ink-soft);max-width:60ch}
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  nav{position:sticky;top:0;z-index:50;background:rgba(245,241,232,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--parchment-deep)}
+  .nav-inner{max-width:1080px;margin:0 auto;padding:.85rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+  .wordmark{font-family:var(--display);font-size:1.15rem;text-decoration:none;display:flex;align-items:center;gap:.55rem}
+  .nav-links{display:flex;gap:1.4rem;flex-wrap:wrap}
+  .nav-links a{text-decoration:none;font-size:.92rem;font-weight:500;color:var(--ink-soft)}
+  .nav-links a:hover{color:var(--brass-ink)}
+
+  header.hero{background:var(--spruce);color:var(--parchment);position:relative;overflow:hidden}
+  .hero-inner{max-width:1080px;margin:0 auto;padding:6.5rem 1.5rem 7rem;position:relative;z-index:2}
+  .hero h1{font-size:clamp(2.2rem,5.6vw,3.9rem);max-width:18ch;margin:.9rem 0 1.2rem}
+  .hero h1 .accent{color:var(--brass-bright)}
+  .hero p{max-width:52ch;font-size:1.15rem;color:#DCE4DC;margin-bottom:2.2rem}
+  .staff{position:absolute;inset:auto 0 0 0;height:48%;z-index:1;opacity:.55}
+  .staff line{stroke:var(--brass-bright);stroke-width:1.4;opacity:.32;stroke-dasharray:1600;stroke-dashoffset:1600;animation:draw 1.6s ease forwards}
+  .staff line:nth-child(2){animation-delay:.1s}.staff line:nth-child(3){animation-delay:.2s}.staff line:nth-child(4){animation-delay:.3s}.staff line:nth-child(5){animation-delay:.4s}
+  .staff circle{fill:var(--brass-bright);opacity:0;animation:pop .5s ease forwards}
+  .staff circle:nth-of-type(1){animation-delay:1s}.staff circle:nth-of-type(2){animation-delay:1.15s}.staff circle:nth-of-type(3){animation-delay:1.3s}.staff circle:nth-of-type(4){animation-delay:1.45s}
+  @keyframes draw{to{stroke-dashoffset:0}} @keyframes pop{to{opacity:.9}}
+
+  .btn{display:inline-block;font-weight:600;font-size:.95rem;text-decoration:none;padding:.8rem 1.5rem;border-radius:999px;border:1.5px solid transparent;transition:transform .15s ease,box-shadow .15s ease}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-brass{background:var(--brass);color:#fff}.btn-brass:hover{box-shadow:0 6px 18px rgba(0,0,0,.25)}
+  .btn-ghost{border-color:var(--brass-bright);color:var(--brass-bright)}.btn-ghost:hover{background:rgba(217,179,106,.12)}
+  .btn-row{display:flex;gap:.9rem;flex-wrap:wrap}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.4rem;margin-top:2.2rem}
+  .card{background:var(--card);border:1px solid var(--parchment-deep);border-radius:14px;padding:1.8rem 1.6rem;display:flex;flex-direction:column;gap:.7rem}
+  .card h3{font-size:1.25rem}
+  .card p{color:var(--ink-soft);font-size:.98rem;flex:1}
+  .card .tag{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--velvet)}
+  .card a{font-weight:600;font-size:.92rem;color:var(--brass-ink);text-decoration:none}
+  .card a:hover{text-decoration:underline}
+
+  .impact{background:var(--parchment-deep);border-block:1px solid #E0D8C6}
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1.6rem;margin-top:2.4rem}
+  .stat{text-align:center}
+  .stat .notehead{width:20px;height:15px;background:var(--brass);border-radius:50%;transform:rotate(-18deg);margin:0 auto .9rem;position:relative}
+  .stat .notehead::after{content:"";position:absolute;right:1px;bottom:6px;width:2px;height:40px;background:var(--brass)}
+  .stat b{font-family:var(--display);font-size:clamp(1.7rem,3.4vw,2.6rem);display:block;color:var(--spruce)}
+  .stat span{font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+
+  .updates-list{margin-top:2.2rem;display:flex;flex-direction:column;gap:1.1rem}
+  .update{background:var(--card);border:1px solid var(--parchment-deep);border-left:3px solid var(--brass);border-radius:10px;padding:1.3rem 1.5rem}
+  .update time{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--velvet)}
+  .update h3{font-size:1.12rem;margin:.35rem 0 .4rem}
+  .update p{color:var(--ink-soft);font-size:.97rem}
+
+  .paths{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.4rem;margin-top:2rem}
+  .path{border-left:3px solid var(--brass);padding:.3rem 0 .3rem 1.2rem}
+  .path h3{font-size:1.1rem;margin-bottom:.4rem}
+  .path p{color:var(--ink-soft);font-size:.96rem}
+
+  .support{background:var(--spruce);color:var(--parchment)}
+  .support .lede{color:#DCE4DC}
+  .support .eyebrow{color:var(--brass-bright)}
+  .support ul{margin:1.4rem 0 2rem 1.2rem;color:#DCE4DC}
+  .support li{margin-bottom:.5rem}
+
+  .contact-box{background:var(--card);border:1px solid var(--parchment-deep);border-radius:14px;padding:2rem;max-width:560px;margin-top:2rem}
+  .contact-box p{color:var(--ink-soft);margin-bottom:1.2rem}
+  form.contact-form{display:none;flex-direction:column;gap:.9rem}
+  form.contact-form.on{display:flex}
+  form.contact-form label{font-weight:600;font-size:.9rem}
+  form.contact-form input,form.contact-form textarea{font-family:var(--body);font-size:1rem;padding:.7rem .9rem;border:1.5px solid var(--parchment-deep);border-radius:8px;background:var(--parchment)}
+  form.contact-form textarea{min-height:110px;resize:vertical}
+
+  footer{background:var(--spruce-deep);color:#BFCBC2;font-size:.88rem}
+  .footer-staff{height:14px;background:repeating-linear-gradient(to bottom,transparent 0,transparent 2px,rgba(217,179,106,.4) 2px,rgba(217,179,106,.4) 3px)}
+  .footer-inner{max-width:1080px;margin:0 auto;padding:2.4rem 1.5rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+  footer a{color:var(--brass-bright)}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .staff line{stroke-dashoffset:0}.staff circle{opacity:.9}.reveal{opacity:1;transform:none}html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+<noscript><div style="background:#9C5F5B;color:#fff;padding:1rem;text-align:center">This site needs JavaScript enabled to display. Most browsers have it on by default.</div></noscript>
+
+<!-- =====================================================================
+     ★★★  THE ONLY PART YOU EDIT IS THIS BLUE BLOCK BELOW  ★★★
+     Change any text between the quote marks "like this".
+     To ADD a program, update, or way-to-help: copy one { ... } block,
+     paste it right after another, and edit the text. Keep the commas.
+     To hide the stats section entirely: set  stats: []
+     Everything below the "DO NOT EDIT" line runs the page — leave it alone.
+===================================================================== -->
+<script>
+const CONTENT = {
+
+  // --- basics ---
+  orgName:   "Octave",
+  email:     "octave@capa-hc.org",
+  location:  "Howard County, MD",
+  instagram: "",                 // e.g. "https://instagram.com/octave.hc"  (leave "" to hide)
+  foundedYear: "2025",           // <-- EDIT to the real founding year
+
+  // --- hero (top banner) ---
+  hero: {
+    eyebrow:   "Student-run nonprofit · Howard County, MD",
+    headline:  "Music taught by students.",
+    highlight: "Shared with the people who need it most.",   // shown in gold
+    sub:       "Octave pairs experienced student musicians with beginners for free one-on-one mentoring — and brings live music into memory care, assisted living, and hospice communities across our county.",
+    primaryBtn:   "Request a mentor",
+    secondaryBtn: "Book a performance"
+  },
+
+  // --- programs (the cards). Add or remove { } blocks freely. ---
+  programs: [
+    { tag:"For young musicians", title:"One-on-one mentoring",
+      body:"Free lessons and practice coaching from all-county and all-state student musicians. Beginners get a mentor who remembers exactly what week three of a new instrument feels like.",
+      cta:"Request a mentor" },
+    { tag:"For care communities", title:"Care-community concerts",
+      body:"Small ensembles perform familiar repertoire in memory care, assisted living, and hospice settings — programs built with each activities director, from big-band standards to residents' own requests.",
+      cta:"Book a visit" },
+    { tag:"For everyone", title:"Community performances",
+      body:"Pop-up ensembles at libraries, farmers markets, and county events — free concerts that double as recruiting grounds for our next class of student mentors.",
+      cta:"Invite us" }
+  ],
+
+  // --- impact numbers. EDIT to real figures, or set  stats: []  to hide. ---
+  // If Octave is brand-new, it's honest to start with small real numbers
+  // or hide this section until you have some.
+  stats: [
+    { number:"—", label:"Students mentored" },
+    { number:"—", label:"Volunteer mentors" },
+    { number:"—", label:"Partner communities" },
+    { number:"—", label:"Hours of free music" }
+  ],
+
+  // --- updates / news. Newest first. Add a { } block each time something happens. ---
+  updates: [
+    { date:"Coming soon", title:"Octave is getting started",
+      body:"We're launching our first mentoring matches and lining up partner communities. Check back here for news, or reach out to get involved." }
+  ],
+
+  // --- get involved paths ---
+  involve: [
+    { title:"Students & parents", body:"Want free lessons? Tell us the instrument, experience level, and availability. We match within two weeks whenever we can." },
+    { title:"Facilities & activity directors", body:"We bring the musicians, stands, and program. You bring the room. Visits run 30–45 minutes and can be scheduled monthly." },
+    { title:"Volunteer musicians", body:"High school musicians with 3+ years on their instrument can join as mentors or performers. Service hours documented for school requirements." }
+  ],
+
+  // --- support us ---
+  support: {
+    heading: "We run on borrowed music stands.",
+    intro:   "Octave is powered entirely by student volunteers, which means small contributions go unusually far. Right now we're looking for:",
+    items: [
+      "Gently used instruments and method books for students who don't have their own",
+      "Rehearsal and performance space partners",
+      "Funds for sheet music licensing, folding stands, and transportation"
+    ]
+  },
+
+  // --- contact form (optional). To turn on: make a free form at formspree.io,
+  //     paste its ID here, e.g. "xzzabcde". Leave "" to just show an email button. ---
+  formspreeId: ""
+};
+</script>
+<!-- =====================================================================
+     ★★★  DO NOT EDIT BELOW THIS LINE  ★★★
+===================================================================== -->
+
+<div id="app"></div>
+
+<script>
+(function(){
+  var C = CONTENT, e = function(s){return String(s==null?"":s);};
+  var mail = "mailto:"+C.email;
+  function subj(t){return mail+"?subject="+encodeURIComponent(t);}
+
+  var nav = ''
+    + '<nav aria-label="Main"><div class="nav-inner">'
+    + '<a class="wordmark" href="#top"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="none" stroke="#B08A3E" stroke-width="1.6"/><ellipse cx="10.5" cy="16.5" rx="4" ry="3" transform="rotate(-18 10.5 16.5)" fill="#2E4A3C"/><rect x="13.6" y="5.5" width="1.7" height="11.5" rx=".8" fill="#2E4A3C"/></svg>'+e(C.orgName)+'</a>'
+    + '<div class="nav-links">'
+    +   '<a href="#programs">Programs</a>'
+    +   (C.stats && C.stats.length ? '<a href="#impact">Impact</a>' : '')
+    +   (C.updates && C.updates.length ? '<a href="#updates">Latest</a>' : '')
+    +   '<a href="#involved">Get involved</a><a href="#support">Support</a><a href="#contact">Contact</a>'
+    + '</div></div></nav>';
+
+  var hero = ''
+    + '<header class="hero" id="top">'
+    + '<svg class="staff" viewBox="0 0 1600 220" preserveAspectRatio="none" aria-hidden="true">'
+    +   '<line x1="0" y1="30" x2="1600" y2="30"/><line x1="0" y1="70" x2="1600" y2="70"/><line x1="0" y1="110" x2="1600" y2="110"/><line x1="0" y1="150" x2="1600" y2="150"/><line x1="0" y1="190" x2="1600" y2="190"/>'
+    +   '<circle cx="1120" cy="110" r="9"/><circle cx="1250" cy="70" r="9"/><circle cx="1380" cy="130" r="9"/><circle cx="1500" cy="90" r="9"/>'
+    + '</svg>'
+    + '<div class="hero-inner">'
+    +   '<span class="eyebrow" style="color:var(--brass-bright)">'+e(C.hero.eyebrow)+'</span>'
+    +   '<h1>'+e(C.hero.headline)+' <span class="accent">'+e(C.hero.highlight)+'</span></h1>'
+    +   '<p>'+e(C.hero.sub)+'</p>'
+    +   '<div class="btn-row"><a class="btn btn-brass" href="#contact">'+e(C.hero.primaryBtn)+'</a><a class="btn btn-ghost" href="#contact">'+e(C.hero.secondaryBtn)+'</a></div>'
+    + '</div></header>';
+
+  var programs = ''
+    + '<section class="section reveal" id="programs">'
+    + '<span class="eyebrow">What we do</span>'
+    + '<h2>Two programs, one idea: music is better given away.</h2>'
+    + '<p class="lede">Every mentor and performer is a student volunteer. Every program is free for the people we serve.</p>'
+    + '<div class="cards">'
+    + C.programs.map(function(p){
+        return '<article class="card"><span class="tag">'+e(p.tag)+'</span><h3>'+e(p.title)+'</h3><p>'+e(p.body)+'</p><a href="'+subj(p.cta+" — via website")+'">'+e(p.cta)+' →</a></article>';
+      }).join('')
+    + '</div></section>';
+
+  var impact = (C.stats && C.stats.length) ? ''
+    + '<section class="impact" id="impact"><div class="section reveal">'
+    + '<span class="eyebrow">Our impact so far</span><h2>The numbers, set to music.</h2>'
+    + '<div class="stat-row">'
+    + C.stats.map(function(s){ return '<div class="stat"><div class="notehead" aria-hidden="true"></div><b>'+e(s.number)+'</b><span>'+e(s.label)+'</span></div>'; }).join('')
+    + '</div></div></section>' : '';
+
+  var updates = (C.updates && C.updates.length) ? ''
+    + '<section class="section reveal" id="updates">'
+    + '<span class="eyebrow">Latest</span><h2>What\'s happening at '+e(C.orgName)+'.</h2>'
+    + '<div class="updates-list">'
+    + C.updates.map(function(u){ return '<article class="update"><time>'+e(u.date)+'</time><h3>'+e(u.title)+'</h3><p>'+e(u.body)+'</p></article>'; }).join('')
+    + '</div></section>' : '';
+
+  var involve = ''
+    + '<section class="section reveal" id="involved">'
+    + '<span class="eyebrow">Get involved</span><h2>Ways in.</h2>'
+    + '<div class="paths">'
+    + C.involve.map(function(p){ return '<div class="path"><h3>'+e(p.title)+'</h3><p>'+e(p.body)+'</p></div>'; }).join('')
+    + '</div></section>';
+
+  var support = ''
+    + '<section class="support"><div class="section reveal">'
+    + '<span class="eyebrow">Support us</span><h2>'+e(C.support.heading)+'</h2>'
+    + '<p class="lede">'+e(C.support.intro)+'</p><ul>'
+    + C.support.items.map(function(i){ return '<li>'+e(i)+'</li>'; }).join('')
+    + '</ul><a class="btn btn-ghost" href="'+subj("Supporting "+C.orgName)+'">Email us about supporting</a>'
+    + '</div></section>';
+
+  var formHtml = C.formspreeId
+    ? '<form class="contact-form on" action="https://formspree.io/f/'+e(C.formspreeId)+'" method="POST">'
+      + '<label for="name">Name</label><input id="name" name="name" type="text" required>'
+      + '<label for="email">Email</label><input id="email" name="email" type="email" required>'
+      + '<label for="message">What can we help with?</label><textarea id="message" name="message" required></textarea>'
+      + '<button class="btn btn-brass" type="submit">Send message</button></form>'
+    : '<a class="btn btn-brass" href="'+subj("Hello "+C.orgName)+'">Email '+e(C.email)+'</a>';
+
+  var contact = ''
+    + '<section class="section reveal" id="contact">'
+    + '<span class="eyebrow">Contact</span><h2>Say hello.</h2>'
+    + '<div class="contact-box"><p>Requests, questions, and ideas all land in the same inbox — we answer within a few days, school schedule permitting.</p>'
+    + formHtml + '</div></section>';
+
+  var igLink = C.instagram ? '<a href="'+e(C.instagram)+'">Instagram</a> · ' : '';
+  var footer = ''
+    + '<div class="footer-staff" aria-hidden="true"></div><footer><div class="footer-inner">'
+    + '<span>© '+e(C.foundedYear)+'–2026 '+e(C.orgName)+' · A student-run organization in '+e(C.location)+'</span>'
+    + '<span>'+igLink+'<a href="'+mail+'">'+e(C.email)+'</a></span>'
+    + '</div></footer>';
+
+  document.getElementById('app').innerHTML = nav+hero+programs+impact+updates+involve+support+contact+footer;
+
+  // scroll-reveal
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, {threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+})();
+</script>
+</body>
+</html>
